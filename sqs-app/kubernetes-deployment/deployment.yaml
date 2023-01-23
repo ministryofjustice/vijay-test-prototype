@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-running-app
+  namespace: abundant-namespace-staging
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-running-app
+  template:
+    metadata:
+      labels:
+        app: my-running-app
+    spec:
+      containers:
+          - name: my-running-app
+            image: ministryofjustice/test-sqs:1.4
+            imagePullPolicy: IfNotPresent
+            ports:
+            - containerPort: 5000
+            env:
+              - name: QUEUE_URL
+                valueFrom:
+                  secretKeyRef:
+                    name: sqs
+                    key: sqs_id
+              - name: ACCESS_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: access_key_id
+                    name: sqs
+              - name: SECRET_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: secret_access_key
+                    name: sqs
+              - name: SLEEP_TIME
+                value: "60"
