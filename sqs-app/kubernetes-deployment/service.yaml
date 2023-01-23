@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-running-app
+  namespace: abundant-namespace-staging
+  labels:
+    app: my-running-app
+spec:
+  ports:
+  - port: 5000
+    name: http
+    targetPort: 5000
+  selector:
+    app: rails-app
